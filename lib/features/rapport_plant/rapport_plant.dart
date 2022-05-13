@@ -36,7 +36,7 @@ class RapportPlantState extends State<RapportPlant> {
   }
 
   Widget content() {
-    return Column(children: [
+    return ListView(children: [
       Padding(padding: EdgeInsets.only(top: 0, bottom: 40),
 
           child: Image.asset("asset/images/plante.png",width: 600,height: 200,fit: BoxFit.cover,)),
