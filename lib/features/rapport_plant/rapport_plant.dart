@@ -41,7 +41,7 @@ class RapportPlantState extends State<RapportPlant> {
 
           child: Image.asset("asset/images/plante.png",width: 600,height: 200,fit: BoxFit.cover,)),
 
-      Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:           Text(widget.plantName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
+      Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:           Text(widget.plantName, textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
 
 
       ElevatedButton(

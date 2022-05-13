@@ -36,7 +36,9 @@ class SettingPlantState extends State<SettingPlant> {
         return ListView(
           children: [
 
-          Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:           Text(widget.plantName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
+          Padding(
+              padding: EdgeInsets.only(top: 40, bottom: 0),
+              child: Text(widget.plantName, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
           Padding(padding: EdgeInsets.only(top: 20),
             child: InkWell(
               onTap: () {
