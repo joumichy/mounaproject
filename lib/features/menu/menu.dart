@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:happytree/features/connection_setting/connection_setting.dart';
 import 'package:happytree/util/util.dart';
 
 import '../create/create.dart';
@@ -36,8 +37,8 @@ class MenuState extends State<Menu> {
       }
       else{
         return Column(children: [
-          Image.asset("asset/images/logo.png", width: 200,height: 200,),
-          Text("Ajouter votre Mini Tree", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),
+          Padding(padding: EdgeInsets.only(top: 40), child:  Image.asset("asset/images/logo.png", width: 200,height: 200,),),
+          Text("Ajouter votre plante", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),
           Padding(padding: EdgeInsets.only(top: 20), child:    Container(
             width: 50,
             height: 50,
@@ -50,7 +51,17 @@ class MenuState extends State<Menu> {
                 navigateWithName(context, Create().routeName);
 
               }, child: Text("+",style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30)), )
-            ,),)
+            ,),),
+
+          Padding(padding: EdgeInsets.only(top: 60, bottom: 20), child:  Text("Parametre de connexion", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),),
+          Padding(padding: EdgeInsets.only(top: 20), child:
+
+          InkWell(
+          onTap: () {
+              navigateWithName(context, ConnectionSetting().routeName);
+            },
+            child: Image.asset("asset/icons/tool.png", width: 100, height: 100,))
+            ,),
 
         ],);
       }
