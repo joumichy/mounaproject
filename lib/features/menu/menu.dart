@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:happytree/features/connection_setting/connection_setting.dart';
+import 'package:happytree/features/rapport_plant/rapport_plant.dart';
 import 'package:happytree/util/util.dart';
 
 import '../create/create.dart';
@@ -22,12 +23,35 @@ class MenuState extends State<Menu> {
 
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   bool passwordhide = true;
   @override
   void initState() {
     super.initState();
+  }
+
+  Widget itemPlantCreated(String plantName,String secondplantname, String plantlocation){
+    return ListTile(
+      leading:  Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(40.0), color: Colors.grey),
+
+        child: TextButton(
+
+
+          onPressed: () {
+
+          }, child: Icon(Icons.insert_photo_sharp, color: Colors.black,size: 30), )
+        ,),
+      title: Text(plantName),
+      subtitle: Text(secondplantname),
+    trailing: IconButton(
+        onPressed: () {
+      navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation, secondPlantName: secondplantname));
+
+
+    },
+    icon: Image.asset("asset/icons/eye.png",width: 80, height: 80,)),);
   }
 
   Widget content() {
@@ -38,8 +62,9 @@ class MenuState extends State<Menu> {
       else{
         return Column(children: [
           Padding(padding: EdgeInsets.only(top: 40), child:  Image.asset("asset/images/logo.png", width: 200,height: 200,),),
-          Text("Ajouter votre plante", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),
-          Padding(padding: EdgeInsets.only(top: 20), child:    Container(
+          Text("Ajouter une nouvelle plante", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),
+          Padding(padding: EdgeInsets.only(top: 20),
+            child:    Container(
             width: 50,
             height: 50,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(40.0), color: Colors.grey),
@@ -52,7 +77,25 @@ class MenuState extends State<Menu> {
 
               }, child: Text("+",style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30)), )
             ,),),
+          FutureBuilder(
+            future: getPlantData(),
+              builder: (context, snapshot) {
+            if(snapshot.hasData){
 
+              final data = snapshot.data as Map;
+              log(data.toString());
+              if(data['plantname'].toString() !=  "null"){
+                return itemPlantCreated(data["plantname"], data["secondplantname"], data["plantlocation"]);
+              }
+              else{
+                return SizedBox(width: 0, height: 0,);
+
+              }
+            }
+            else{
+              return SizedBox(width: 0, height: 0,);
+            }
+          }),
           Padding(padding: EdgeInsets.only(top: 60, bottom: 20), child:  Text("Parametre de connexion", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),),
           Padding(padding: EdgeInsets.only(top: 20), child:
 

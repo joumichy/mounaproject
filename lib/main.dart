@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:happytree/features/connection_setting/connection_setting.dart';
 import 'package:happytree/features/menu/menu.dart';
 import 'package:happytree/features/plantitem/plantitem.dart';
+import 'package:happytree/features/rapport_plant/rapport_plant.dart';
 import 'package:happytree/features/setting_plant/setting_plant.dart';
 import 'package:happytree/features/splashscreen/splash_screen.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/plantitem': (context) =>  PlantItem(),
         '/setting': (context) =>  ConnectionSetting(),
         '/settingplant': (context) =>  SettingPlant(),
+        '/rapportplant': (context) =>  RapportPlant(),
 
       },
 

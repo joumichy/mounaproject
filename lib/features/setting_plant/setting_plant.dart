@@ -25,9 +25,7 @@ class SettingPlantState extends State<SettingPlant> {
 
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  bool passwordhide = true;
+  TextEditingController textEditingController = TextEditingController();
   String dropdownValue = "Chambre";
   @override
   void initState() {
@@ -59,6 +57,7 @@ class SettingPlantState extends State<SettingPlant> {
           ),
 
           TextField(
+            controller: textEditingController,
             decoration: InputDecoration(
                 enabledBorder: setUnderlineBorderColor(3.0, 1.0, Colors.white),
               focusedBorder: setUnderlineBorderColor(3.0, 1.0, Colors.white)
@@ -94,7 +93,11 @@ class SettingPlantState extends State<SettingPlant> {
           ElevatedButton(
 
             style: BaseButtonRoundedColorBorder(200, 50, APPCOLOR4, 25.0),
-              onPressed: () {
+              onPressed: ()  {
+              final title = textEditingController.text;
+              log(title);
+
+              saveNewTree(title, widget.plantName,dropdownValue);
               navigateWithNamePop(context, Menu().routeName);
 
           }, child: Text("Enregistrer", style: TextStyle(fontSize: 20),)),
