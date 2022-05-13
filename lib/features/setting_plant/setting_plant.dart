@@ -48,7 +48,7 @@ class SettingPlantState extends State<SettingPlant> {
               child: Image.asset("asset/icons/add-photo.png", width: 150, height: 150, color: Colors.grey,), )
             ,),
 
-          Padding(padding: EdgeInsets.only(top: 5, bottom: 20), child:  Text("Ajouter une photo", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,),),),
+          Padding(padding: EdgeInsets.only(top: 5, bottom: 20), child:  Text("Ajouter une photo", textAlign : TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,),),),
           Align(
             child: Row(children: [
               Image.asset("asset/icons/form.png", width: 60, height: 60,),
