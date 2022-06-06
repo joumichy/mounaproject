@@ -56,3 +56,4 @@ final plantherbes = PlantType(id: "id", type: "Herbes", path: "asset/images/herb
 final plantfeuillage = PlantType(id: "id", type: "Plantes à feuillage",path: "asset/images/plante_feuillage.png");
 
 final List<PlantType >mocTypesOfPlantes = [plantfleuries,plantorchidees,plantcactus,plantlegumes,plantherbes,plantfeuillage];
+

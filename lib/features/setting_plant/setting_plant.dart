@@ -34,6 +34,7 @@ class SettingPlantState extends State<SettingPlant> {
 
   Widget content() {
         return ListView(
+
           children: [
 
           Padding(
@@ -70,40 +71,42 @@ class SettingPlantState extends State<SettingPlant> {
             alignment: Alignment.bottomLeft,
             child:           Padding(padding: EdgeInsets.only(top: 30), child: Text("Emplacement :", style: TextStyle(fontSize: 15),),),
           ),
-         Padding(padding: EdgeInsets.only(top: 30, bottom: 40), child: Container(
-           width: 250,
-           alignment: Alignment.center,
-           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(width: 3, color: Colors.white)),
-           child:  DropdownButton<String>(
 
-               value: dropdownValue,
+          Align(child:  Padding(padding: EdgeInsets.only(top: 30, bottom: 40),
+            child: Container(
+              width: 200,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(width: 3, color: Colors.white)),
+              child:  DropdownButton<String>(
 
-               style: TextStyle(color: Colors.white),
-               items: <String>['Chambre', 'Salon', 'Balcon', 'Terasse']
-                   .map<DropdownMenuItem<String>>((String value) {
-                 return DropdownMenuItem<String>(
+                  value: dropdownValue,
 
-                   value: value,
-                   child: Text(value,style: TextStyle(color: Colors.white),),
-                 );
-               }).toList(),
-               onChanged: (String? value){
-                 dropdownValue = value!;
-                 setState(() {
+                  style: TextStyle(color: Colors.white),
+                  items: <String>['Chambre', 'Salon', 'Balcon', 'Terasse']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
 
-                 });
-               }),),),
-          ElevatedButton(
+                      value: value,
+                      child: Text(value,style: TextStyle(color: Colors.white),),
+                    );
+                  }).toList(),
+                  onChanged: (String? value){
+                    dropdownValue = value!;
+                    setState(() {
 
-            style: BaseButtonRoundedColorBorder(200, 50, APPCOLOR4, 25.0),
+                    });
+                  }),),),),
+          Align(child: ElevatedButton(
+
+              style: BaseButtonRoundedColorBorder(200, 50, APPCOLOR4, 25.0),
               onPressed: ()  {
-              final title = textEditingController.text;
-              log(title);
+                final title = textEditingController.text;
+                log(title);
 
-              saveNewTree(title, widget.plantName,dropdownValue);
-              navigateWithNamePop(context, Menu().routeName);
+                saveNewTree(title, widget.plantName,dropdownValue);
+                navigateWithNamePop(context, Menu().routeName);
 
-          }, child: Text("Enregistrer", style: TextStyle(fontSize: 20),)),
+              }, child: Text("Enregistrer", style: TextStyle(fontSize: 20),)),)
 
 
         ],);

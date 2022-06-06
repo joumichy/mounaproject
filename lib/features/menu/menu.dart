@@ -29,7 +29,7 @@ class MenuState extends State<Menu> {
     super.initState();
   }
 
-  Widget itemPlantCreated(String plantName,String secondplantname, String plantlocation){
+  Widget  itemPlantCreated(String plantName,String secondplantname, String plantlocation){
     return ListTile(
       leading:  Container(
         width: 50,
