@@ -46,7 +46,7 @@ class RapportPlantState extends State<RapportPlant> {
       ),
       child: Column(
           children: [
-      Padding(padding: EdgeInsets.only(top : 10,left: 10), child:  Align(child: Text(title, style: TextStyle(color: APPCOLOR, fontSize: 25),textAlign: TextAlign.start), alignment: Alignment.centerLeft),),
+      Padding(padding: EdgeInsets.only(top : 10,left: 10,bottom: 10), child:  Align(child: Text(title, style: TextStyle(color: APPCOLOR, fontSize: 25),textAlign: TextAlign.start), alignment: Alignment.centerLeft),),
             child,
             Padding(padding: EdgeInsets.only(bottom: 10), child:         Text("Toucher pour savoir"),)
     ]),);
@@ -56,12 +56,13 @@ class RapportPlantState extends State<RapportPlant> {
   
 
   Widget content() {
-    return ListView(children: [
+    return ListView(
+      children: [
       Padding(padding: EdgeInsets.only(top: 0, bottom: 40),
 
           child: Image.asset("asset/images/plante.png",width: 600,height: 200,fit: BoxFit.cover,)),
 
-      Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:           Text(widget.plantName, textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
+      Padding(padding: EdgeInsets.only(top: 0, bottom: 0), child:           Text(widget.plantName, textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
 
       Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
           ListTile(leading: Container(child: Icon(Icons.wb_sunny)), title: Text("Mi-soleil, mi ombre"), subtitle: Text("Luminosité idéale"),),
@@ -104,7 +105,8 @@ class RapportPlantState extends State<RapportPlant> {
           ListTile(leading: Container(child: Image.asset("asset/icons/degree.png",width: 40, height: 40,)), title: Text("5°C"), subtitle: Text("Température de survie la plus faible en pot"),),
           "Zone de rusticité")),
 
-      Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
+      Padding(padding: EdgeInsets.only(top: 40, bottom: 10),
+          child:     cardElem(
           Padding(padding: EdgeInsets.only(left: 10,right: 10),
             child:   Column(
 
@@ -121,36 +123,36 @@ class RapportPlantState extends State<RapportPlant> {
               Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Extérieur"),alignment: Alignment.centerLeft,),),
               SfSliderTheme(
                 data:  SfSliderThemeData(
-                  activeDividerColor: Colors.white,
+                  activeDividerColor: Colors.red,
                   activeDividerStrokeColor: Colors.red,
                   activeDividerStrokeWidth: 1,
                   activeDividerRadius: 6,
                   activeTrackColor: Colors.transparent,
 
-                  disabledActiveDividerColor: Colors.white,
+                  disabledActiveDividerColor: Colors.red,
                   inactiveDividerColor: Colors.red,
+                  inactiveDividerStrokeColor: Colors.red,
                   inactiveDividerStrokeWidth: 1,
                   inactiveDividerRadius: 6,
                   inactiveTrackColor: Colors.transparent,
-                  overlayRadius: 0,
                   thumbColor: Colors.transparent,
+                  thumbRadius: 50,
+                  overlayRadius: 0,
 
 
                 ),
-                child:  SfSlider(
+                child : SfSlider(
                     // enableTooltip: true,
                     showDividers: true,
+
+
                     // thumbShape: SfThumbShapeCustom(),
-                    thumbIcon: Container(
-                      child:  Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                        width: 40,child: Align(child: Text("mai -sep", style: TextStyle(color: Colors.black) ), alignment: Alignment.center,),), ),
+                    thumbIcon: Align(child : Container( width: 200, decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: APPCOLOR3),child : Text("mai - sep",style :TextStyle(color:  Colors.black),textAlign: TextAlign.center,))),
                     // dividerShape:  DividerShapeCustom(),
                     // activeColor: Colors.red,
-                    value: tempValue,onChanged: (value){
-                  tempValue = value; setState(() {
-
-                  });}, interval: 5, min : 0, max : 30),
+                    value: 15,
+                    onChanged: (value){
+                  }, interval: 5, min : 0, max : 30),
               ),
 
 
