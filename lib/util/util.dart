@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:happytree/models/PlantType.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../response/signinresponse.dart';
+
+
+const SUCCESS_CODE = 0;
+const ERROR_CODE = 1;
+const NONE_CODE = 2;
 navigateTo(context,view){
   Navigator.push(
     context,
@@ -48,6 +54,22 @@ Future<dynamic> getPlantData()async{
   };
 }
 
+Future<String> getCurrentUserToken()async{
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  Object? token = sharedPreferences.get("token");
+  return token.toString();
+}
+
+
+
+Future<void> saveUserData(SignInResponse data) async {
+
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+  sharedPreferences.setString("token", data.token);
+  sharedPreferences.setString("username", data.username);
+
+}
 final plantfleuries = PlantType(id: "id", type: "Plantes fleuries", path: "asset/images/plante_fleuries.png");
 final plantorchidees = PlantType(id: "id", type: "Orchidées", path: "asset/images/orchidees.png");
 final plantcactus = PlantType(id: "id", type: "Cactus et succulentes", path: "asset/images/cactus.png");

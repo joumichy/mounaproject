@@ -3,8 +3,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:happytree/components/design/design.dart';
+import 'package:happytree/features/auth/signin/signin.dart';
 import 'package:happytree/features/connection_setting/connection_setting.dart';
+import 'package:happytree/features/menu/api.dart';
 import 'package:happytree/features/rapport_plant/rapport_plant.dart';
+import 'package:happytree/response/plantuserresponse.dart';
 import 'package:happytree/util/util.dart';
 
 import '../create/create.dart';
@@ -29,7 +33,7 @@ class MenuState extends State<Menu> {
     super.initState();
   }
 
-  Widget  itemPlantCreated(String plantName,String secondplantname, String plantlocation){
+  Widget  itemPlantCreated(String plantName, String plantlocation){
     return ListTile(
       leading:  Container(
         width: 50,
@@ -44,10 +48,9 @@ class MenuState extends State<Menu> {
           }, child: Icon(Icons.insert_photo_sharp, color: Colors.black,size: 30), )
         ,),
       title: Text(plantName),
-      subtitle: Text(secondplantname),
     trailing: IconButton(
         onPressed: () {
-      navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation, secondPlantName: secondplantname));
+      navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation));
 
 
     },
@@ -55,66 +58,71 @@ class MenuState extends State<Menu> {
   }
 
   Widget content() {
-    return FutureBuilder(builder: (context, snapshot) {
-      if(snapshot.hasData){
-        return Text("Data");
-      }
-      else{
-        return Column(children: [
+    return FutureBuilder(
+      builder: (context, AsyncSnapshot<PlantUserResponse>snapshot) {
+
+        return ListView(children: [
           Padding(padding: EdgeInsets.only(top: 40), child:  Image.asset("asset/images/logo.png", width: 200,height: 200,),),
           Text("Ajouter une nouvelle plante", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),
           Padding(padding: EdgeInsets.only(top: 20),
-            child:    Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40.0), color: Colors.grey),
+            child:    Align(child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40.0), color: Colors.grey),
 
-            child: TextButton(
+              child: TextButton(
 
 
-              onPressed: () {
-                navigateWithName(context, Create().routeName);
+                onPressed: () {
+                  navigateWithName(context, Create().routeName);
 
-              }, child: Text("+",style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30)), )
-            ,),),
+                }, child: Text("+",style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30)), )
+              ,),alignment: Alignment.center,)
+          ),
           FutureBuilder(
-            future: getPlantData(),
-              builder: (context, snapshot) {
-            if(snapshot.hasData){
+              future: getPlantUser(),
+              builder: (context,  AsyncSnapshot<PlantUserResponse>snapshot) {
+                if(snapshot.connectionState == ConnectionState.done){
+                  if(snapshot.hasData){
+                    log(snapshot.data?.plant_name.toString() ?? "test");
+                    return itemPlantCreated(snapshot.data?.plant_name ?? "", snapshot.data?.plant_death.toString() ?? "");
+                  }
 
-              final data = snapshot.data as Map;
-              log(data.toString());
-              if(data['plantname'].toString() !=  "null"){
-                return itemPlantCreated(data["plantname"], data["secondplantname"], data["plantlocation"]);
-              }
-              else{
-                return SizedBox(width: 0, height: 0,);
+                  else{
+                  return SizedBox(width: 0, height: 0,);
+                  }
 
-              }
-            }
-            else{
-              return SizedBox(width: 0, height: 0,);
-            }
-          }),
+                }
+                else{
+                  return Center(child: CircularProgressIndicator(color: APPCOLOR,));
+                }
+
+              }),
           Padding(padding: EdgeInsets.only(top: 60, bottom: 20), child:  Text("Parametre de connexion", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),),
           Padding(padding: EdgeInsets.only(top: 20), child:
 
           InkWell(
-          onTap: () {
-              navigateWithName(context, ConnectionSetting().routeName);
-            },
-            child: Image.asset("asset/icons/tool.png", width: 100, height: 100,))
+              onTap: () {
+                navigateWithName(context, ConnectionSetting().routeName);
+              },
+              child: Image.asset("asset/icons/tool.png", width: 100, height: 100,))
             ,),
 
         ],);
-      }
 
-    },);
+      },);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(backgroundColor: Colors.black, automaticallyImplyLeading:  false, actions: [
+          IconButton(
+              onPressed: (){
+                navigateWithNamePop(context, SignIn().routeName);
+          },
+              icon: const Icon(Icons.logout))
+        ]),
 
         body: Center(
             child: content()

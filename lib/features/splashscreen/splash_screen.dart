@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../util/config.dart';
+import '../../util/util.dart';
 import '../auth/signin/signin.dart';
 
 class SplashScreen extends StatefulWidget {

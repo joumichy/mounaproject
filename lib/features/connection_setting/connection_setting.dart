@@ -59,6 +59,7 @@ class ConnectionSettingState extends State<ConnectionSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(backgroundColor: Colors.black),
 
         body: Center(
             child: content()

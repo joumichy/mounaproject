@@ -3,12 +3,15 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:happytree/features/create/api.dart';
 import 'package:happytree/features/menu/menu.dart';
 import 'package:happytree/features/plantitem/plantitem.dart';
 import 'package:happytree/models/PlantType.dart';
+import 'package:happytree/response/plantresponse.dart';
 
 import '../../../components/design/design.dart';
 import '../../../util/util.dart';
+import '../setting_plant/setting_plant.dart';
 
 class Create extends StatefulWidget {
 
@@ -38,8 +41,6 @@ class CreateState extends State<Create> {
 
 
 
-
-
   Widget contentSearch(){
     return Visibility(
       visible: isSearching ,
@@ -48,21 +49,45 @@ class CreateState extends State<Create> {
       Text("Chercher un nom, variété ou un nom spécifique", style: TextStyle(fontSize: 16),)
     ],), );
   }
+
+  Widget itemPlant(String nameFlower){
+    return InkWell(
+      onTap: (){
+        navigateTo(context, SettingPlant.withName(plantName: nameFlower));
+      },
+      child: Row(children: [
+        Image.asset("asset/icons/file-eye.png",width: 40, height: 40,),
+        Container(
+          width: 300,
+          height: 50,
+          padding: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), border: Border.all(width: 1, color: Colors.white)),
+          child: Text(nameFlower, style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
+        )
+      ],),);
+  }
   Widget content() {
     return Visibility(
       visible: !isSearching,
-      child: Padding(padding: EdgeInsets.only(top: 40),child: Container(
-      child: GridView.builder(
-          shrinkWrap: true, // You won't see infinite size error
-          itemCount: 6,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 2,
-            mainAxisSpacing: 2,
-          ), itemBuilder: (context, index){
-        return itemTypeOfPlant(plantList[index]);
-      }
-      ),)),);
+      child:  Expanded(child:
+      FutureBuilder(
+        future: getPlantTypes(),
+        builder: (context, AsyncSnapshot<PlantsResponse>snapshot) {
+
+          if(snapshot.connectionState == ConnectionState.done){
+            return  ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: snapshot.data!.plants!.length,
+              itemBuilder: (context, index) {
+                return itemPlant(snapshot.data!.plants![index].name_flower ?? "test");
+              },);
+          }
+          else{
+            return Text("No Data");
+          }
+      },)
+      ));
   }
 
   itemTypeOfPlant(PlantType plantType){
@@ -88,10 +113,10 @@ class CreateState extends State<Create> {
           Visibility(
             visible: !isSearching,
             child:const Padding(
-              padding: EdgeInsets.only(top: 20),
+              padding: EdgeInsets.only(top: 20 ),
               child: Text("Chercher une plante", style: TextStyle(fontSize: 30, ),),),
           ),
-          Padding(padding: EdgeInsets.only(top: 40),
+          Padding(padding: EdgeInsets.only(top: 40,bottom: 40),
             child:  FocusScope(child: TextField(
 
               // focusNode: _focus,

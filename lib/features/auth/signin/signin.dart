@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:happytree/features/auth/api.dart';
 import 'package:happytree/features/menu/menu.dart';
 
 import '../../../components/design/design.dart';
@@ -48,7 +49,7 @@ class SignInState extends State<SignIn> {
             Padding(padding: const EdgeInsets.only(bottom: 16, top: 16),
                 child: TextFormField(
                     autofillHints: const <String>[AutofillHints.username],
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.center,
                     controller: usernameController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -71,7 +72,7 @@ class SignInState extends State<SignIn> {
               padding: const EdgeInsets.only(bottom: 16, top: 16),
               child: TextFormField(
                 autofillHints: const <String>[AutofillHints.password],
-                textAlign: TextAlign.start,
+                textAlign: TextAlign.center,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Entrer un mot de passe";
@@ -88,6 +89,7 @@ class SignInState extends State<SignIn> {
                     errorBorder: setUnderlineBorderError(2.0, 20.0),
                     border: setUnderlineBorder(1.5, 25.0),
                     hintText: 'Password',
+                    prefix: SizedBox(width: 50,height: 0,),
                     suffixIcon: IconButton(onPressed: () {
                       this.passwordhide = !this.passwordhide;
                       setState(() {
@@ -106,8 +108,16 @@ class SignInState extends State<SignIn> {
                 onPressed: () async {
                   if (_formkey.currentState!.validate()) {
                     showSnackBar(context, "Connexion");
+                    final result = await signinUser(usernameController.text, passwordController.text);
+                    if(result.code == SUCCESS_CODE){
+                      navigateWithName(context, Menu().routeName);
+                    }
+                    else{
+                      showSnackBar(context, result.message);
+                    }
+
                   } else {
-                    navigateWithName(context, Menu().routeName);
+                    // navigateWithName(context, Menu().routeName);
                   }
                 }
                 ,

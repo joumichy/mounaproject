@@ -17,10 +17,9 @@ class RapportPlant extends StatefulWidget {
   final routeName = '/rapportplant';
   final String plantName;
   final String plantLocation;
-  final String secondPlantName;
 
-  const RapportPlant({Key? key, this.plantName = "",this.plantLocation = "",this.secondPlantName = ""}) : super(key: key);
-  const RapportPlant.withName({Key? key, required this.plantName,  required this.plantLocation, required this.secondPlantName}) : super(key: key);
+  const RapportPlant({Key? key, this.plantName = "",this.plantLocation = ""}) : super(key: key);
+  const RapportPlant.withName({Key? key, required this.plantName,  required this.plantLocation}) : super(key: key);
 
   @override
   RapportPlantState createState() => RapportPlantState();
@@ -101,9 +100,9 @@ class RapportPlantState extends State<RapportPlant> {
           "Température idéale")),
 
 
-      Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
-          ListTile(leading: Container(child: Image.asset("asset/icons/degree.png",width: 40, height: 40,)), title: Text("5°C"), subtitle: Text("Température de survie la plus faible en pot"),),
-          "Zone de rusticité")),
+      // Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
+      //     ListTile(leading: Container(child: Image.asset("asset/icons/degree.png",width: 40, height: 40,)), title: Text("5°C"), subtitle: Text("Température de survie la plus faible en pot"),),
+      //     "Zone de rusticité")),
 
       Padding(padding: EdgeInsets.only(top: 40, bottom: 10),
           child:     cardElem(
@@ -114,13 +113,14 @@ class RapportPlantState extends State<RapportPlant> {
               // Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Intérieur"),alignment: Alignment.centerLeft,),),
 
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text("Jan"),Text("Jui"),Text("Dec"),],),
-              ElevatedButton(
-
-                  style: BaseButtonRoundedColorBorder(600, 30, APPCOLOR3, 25.0),
-                  onPressed: ()  {
-
-                  }, child: Text("Année compl.", style: TextStyle(color: Colors.black),)),
-              Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Extérieur"),alignment: Alignment.centerLeft,),),
+              // ElevatedButton(
+              //
+              //     style: BaseButtonRoundedColorBorder(600, 30, APPCOLOR3, 25.0),
+              //     onPressed: ()  {
+              //
+              //     }, child: Text("Année compl.", style: TextStyle(color: Colors.black),)),
+              // Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Extérieur"),alignment: Alignment.centerLeft,),),
+              // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text("Jan"),Text("Jui"),Text("Dec"),],),
               SfSliderTheme(
                 data:  SfSliderThemeData(
                   activeDividerColor: Colors.red,
@@ -147,7 +147,7 @@ class RapportPlantState extends State<RapportPlant> {
 
 
                     // thumbShape: SfThumbShapeCustom(),
-                    thumbIcon: Align(child : Container( width: 200, decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: APPCOLOR3),child : Text("mai - sep",style :TextStyle(color:  Colors.black),textAlign: TextAlign.center,))),
+                    thumbIcon: Align( child : Container( width: 250, height : 30,decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: APPCOLOR3),child : Center(child: Text("mai - sep",style :TextStyle(color:  Colors.black),textAlign: TextAlign.center,)))),
                     // dividerShape:  DividerShapeCustom(),
                     // activeColor: Colors.red,
                     value: 15,
@@ -159,7 +159,7 @@ class RapportPlantState extends State<RapportPlant> {
 
             ],
           ),),
-          "Lieux adaptés")),
+          "Période adaptées")),
       ElevatedButton(
 
           style: BaseButtonRoundedColorBorder(200, 50, Colors.pink, 25.0),
