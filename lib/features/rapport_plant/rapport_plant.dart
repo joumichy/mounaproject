@@ -68,7 +68,7 @@ class RapportPlantState extends State<RapportPlant> {
             children: [
               Padding(padding: EdgeInsets.only(top: 0, bottom: 40),
 
-                  child: Image.asset("asset/images/plante.png",width: 600,height: 200,fit: BoxFit.cover,)),
+                  child: Image.asset("asset/icons/logo-plant.png",width: 600,height: 200,fit: BoxFit.fitHeight)),
 
               Padding(padding: EdgeInsets.only(top: 0, bottom: 0), child:           Text(widget.plantName, textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
 
@@ -82,16 +82,16 @@ class RapportPlantState extends State<RapportPlant> {
                         children: [
                           Column(children: [
                             Image.asset("asset/icons/luminosity.png", width: 40, height: 40,),
-                            Text(snapshot.data?.payload.device_data?.luminosity ?? "")
+                            Text(double.parse(snapshot.data?.payload.device_data?.luminosity?? "0").toStringAsFixed(2))
                           ],),
                           Column(children: [
                             Image.asset("asset/icons/temp.png", width: 40, height: 40,),
-                            Text(snapshot.data?.payload.device_data?.temperature?? "")
+                            Text(double.parse(snapshot.data?.payload.device_data?.temperature?? "0").toStringAsFixed(2))
 
                           ],),
                           Column(children: [
                             Image.asset("asset/icons/humidity.png", width: 40, height: 40,),
-                            Text(snapshot.data?.payload.device_data?.humidity ?? "")
+                            Text(double.parse(snapshot.data?.payload.device_data?.humidity?? "0").toStringAsFixed(2))
 
                           ],)
                         ],

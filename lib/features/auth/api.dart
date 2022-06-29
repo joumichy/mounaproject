@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart'as http;
 
+import '../../response/BaseResponse.dart';
 import '../../response/signinresponse.dart';
 import '../../util/config.dart';
 import '../../util/util.dart';
@@ -48,7 +49,7 @@ Future<SignInResponse> signinUser(String username, String password) async{
 
 
 }
-Future<SignInResponse> signUpUSer(String username, String password, String phoneNumber, String email) async{
+Future<BasicResponse> signUpUSer(String username, String password, String email) async{
   http.Response response;
 
   const String path = "/user/signup";
@@ -56,7 +57,6 @@ Future<SignInResponse> signUpUSer(String username, String password, String phone
   Map data =  {
     'username' : username,
     'password' : password,
-    'phoneNumber' : phoneNumber,
     'email' : email
   };
   try {
@@ -67,15 +67,12 @@ Future<SignInResponse> signUpUSer(String username, String password, String phone
   }
   catch (e) {
     print(e.toString());
-    return SignInResponse(code: 1, message: "Erreur serveur");
+    return BasicResponse(code: 1, message: "Erreur serveur", payload: null);
   }
 
   if(response.statusCode == 201) {
-    SignInResponse data = SignInResponse.fromJsonData(json.decode(response.body));
+    BasicResponse data = BasicResponse.fromJsonData(json.decode(response.body));
     print(json.decode(response.body));
-    if(data != null) {
-      saveUserData(data);
-    }
     return data ;
   }
   else{
@@ -85,7 +82,7 @@ Future<SignInResponse> signUpUSer(String username, String password, String phone
     }catch(e){
       message = "Une erreur est survenue";
     }
-    return SignInResponse(code: json.decode(response.body)['code'], message: message);
+    return BasicResponse(code: json.decode(response.body)['code'], message: message, payload: null);
   }
 
 

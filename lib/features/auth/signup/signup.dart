@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:happytree/features/auth/api.dart';
+import 'package:happytree/features/auth/signin/signin.dart';
 
 import '../../../components/design/design.dart';
 import '../../../util/util.dart';
@@ -23,7 +25,6 @@ class SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneNumberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   bool condition = false;
   @override
@@ -38,10 +39,31 @@ class SignUpState extends State<SignUp> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
-            const Padding(padding: EdgeInsets.only(left: 20), child: Align(child:  Text("SignUp",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.white), ),alignment: Alignment.bottomLeft),
+            const Padding(padding: EdgeInsets.only(left: 20), child: Align(child:  Text("SignUp",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.white), ),alignment: Alignment.center),
             ),
             Padding(padding: const  EdgeInsets.only(bottom: 16, top: 16),
-                child: TextFormField(
+                child:
+                TextFormField(
+
+                  autofillHints: const <String>[AutofillHints.email],
+                  textAlign: TextAlign.center,
+                  controller: usernameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Entrer votre nom d'utilisateur";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: setUnderlineBorder(1.5, 20.0),
+                    enabledBorder: setUnderlineBorder(1.5, 20.0),
+                    border: setUnderlineBorder(1.5, 20.0),
+                    hintText: "Nom d'utilisateur",
+                  ),
+                )),
+            Padding(padding: const  EdgeInsets.only(bottom: 16, top: 16),
+                child:
+                TextFormField(
 
                   autofillHints: const <String>[AutofillHints.email],
                   textAlign: TextAlign.center,
@@ -56,7 +78,7 @@ class SignUpState extends State<SignUp> {
                     focusedBorder: setUnderlineBorder(1.5, 20.0),
                     enabledBorder: setUnderlineBorder(1.5, 20.0),
                     border: setUnderlineBorder(1.5, 20.0),
-                    hintText: "Your email address",
+                    hintText: "Adresse email",
                   ),
                 )),
             Padding(
@@ -82,26 +104,25 @@ class SignUpState extends State<SignUp> {
                 ),
               ),)
             ,
-            Row(children: [
-              Checkbox(
-                activeColor: APPCOLOR2,
-                value: condition, onChanged: (value){
-                condition = value!;
-                setState(() {
 
-                }
-                );
-              },),
-            ],),
             Padding(padding: EdgeInsets.only(top: 40, bottom: 20),
               child: ElevatedButton(
                 style: BaseButtonRoundedColor(320, 40, APPCOLOR2),
                 onPressed: () async {
                   if (_formkey.currentState!.validate()) {
                     showSnackBar(context, "Connexion");
+                    final result = await signUpUSer(usernameController.text, passwordController.text, emailController.text);
+                    if(result.code == SUCCESS_CODE){
+                      showSnackBar(context, "Inscription réalisée");
+                      navigateWithNamePop(context, SignIn().routeName);
+
+                    }
+                    else{
+                      showSnackBar(context, "Une erreur est survenue");
+
+                    }
                   }
                   else {
-                    showSnackBar(context, "Test");
                   }
                 },
                 child: const Text("Continue"),
@@ -114,6 +135,7 @@ class SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(backgroundColor: Colors.black,),
 
         body: Center( child :userForm())
     );

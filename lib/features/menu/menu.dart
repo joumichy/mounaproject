@@ -35,7 +35,7 @@ class MenuState extends State<Menu> {
 
   Widget  itemPlantCreated(String plantName, String plantlocation, String plantUserId, String plantId){
     log("PLANT ID : $plantId");
-    return ListTile(
+    return InkWell(child: ListTile(
       leading:  Container(
         width: 50,
         height: 50,
@@ -46,16 +46,20 @@ class MenuState extends State<Menu> {
 
           onPressed: () {
 
-          }, child: Icon(Icons.insert_photo_sharp, color: Colors.black,size: 30), )
+          }, child: Image.asset("asset/icons/logo-plant.png", width: 30, height: 30,), )
         ,),
       title: Text(plantName),
-    trailing: IconButton(
-        onPressed: () {
+      trailing: IconButton(
+          onPressed: () {
+            navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation, plantUserId: plantUserId, plantId: plantId,));
+
+
+          },
+          icon: Image.asset("asset/icons/eye.png",width: 80, height: 80,)),),
+    onTap: (){
       navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation, plantUserId: plantUserId, plantId: plantId,));
 
-
-    },
-    icon: Image.asset("asset/icons/eye.png",width: 80, height: 80,)),);
+    },);
   }
 
   Widget content() {
@@ -64,7 +68,7 @@ class MenuState extends State<Menu> {
 
         return ListView(children: [
           Padding(padding: EdgeInsets.only(top: 40), child:  Image.asset("asset/images/logo.png", width: 200,height: 200,),),
-          Text("Ajouter une nouvelle plante", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),
+          Text("Ajouter une nouvelle plante", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),textAlign: TextAlign.center),
           Padding(padding: EdgeInsets.only(top: 20),
             child:    Align(child: Container(
               width: 50,
@@ -100,11 +104,11 @@ class MenuState extends State<Menu> {
 
                 }
                 else{
-                  return Center(child: CircularProgressIndicator(color: APPCOLOR,));
+                  return Padding(padding: EdgeInsets.only(top: 20),child: Center(child: CircularProgressIndicator(color: APPCOLOR,)),);
                 }
 
               }),
-          Padding(padding: EdgeInsets.only(top: 60, bottom: 20), child:  Text("Parametre de connexion", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),),),
+          Padding(padding: EdgeInsets.only(top: 60, bottom: 20), child:  Text("Parametre de connexion", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),textAlign: TextAlign.center),),
           Padding(padding: EdgeInsets.only(top: 20), child:
 
           InkWell(
@@ -124,7 +128,9 @@ class MenuState extends State<Menu> {
     return Scaffold(
         appBar: AppBar(backgroundColor: Colors.black, automaticallyImplyLeading:  false, actions: [
           IconButton(
-              onPressed: (){
+              onPressed: () async {
+
+                await disconnectUser();
                 navigateWithNamePop(context, SignIn().routeName);
           },
               icon: const Icon(Icons.logout))

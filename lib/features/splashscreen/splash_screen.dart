@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:happytree/features/menu/menu.dart';
 
 import '../../util/config.dart';
 import '../../util/util.dart';
@@ -42,8 +43,8 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   navigateToApp(bool isLogged) async {
-    // String path = isLogged  ? const TabView().routeName : const SignIn().routeName ;
-    String path = const SignIn().routeName ;
+    String path = isLogged  ? const Menu().routeName : const SignIn().routeName ;
+    // String path = const SignIn().routeName ;
 
     Future.delayed(Duration.zero, () async {
       await Navigator.pushNamed(context, path);

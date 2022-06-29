@@ -124,20 +124,13 @@ class SignInState extends State<SignIn> {
                 child: const Text('Se connecter'),
               ),),
             
-            Padding(padding: EdgeInsets.only(top: 50), child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(onPressed: () {
+            Padding(padding: EdgeInsets.only(top: 10), child:
+            TextButton(
+                onPressed: () {
+                  navigateWithName(context, SignUp().routeName);
+                },
+                child: const Text("Pas encore inscrit ? créez vous un compte",style: TextStyle(color: APPCOLOR2),)),)
 
-                }, child: const Text("Forgot password ?", style: TextStyle(color: APPCOLOR2),), ),
-                TextButton(
-                    onPressed: () {
-                      navigateWithName(context, SignUp().routeName);
-                      },
-                    child: const Text("Sign Up",style: TextStyle(color: APPCOLOR2),))
-
-
-              ],),)
           ],
         ),)
     );

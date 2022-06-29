@@ -70,6 +70,13 @@ Future<void> savePlantData(PlantUserResponse response)async {
 
 }
 
+Future<void> disconnectUser()async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  // print("Token "+data.token);
+  sharedPreferences.clear();
+
+}
+
 Future<void> saveUserData(SignInResponse data) async {
 
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
