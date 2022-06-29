@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:happytree/models/PlantType.dart';
+import 'package:happytree/response/plantuserresponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../response/signinresponse.dart';
@@ -60,14 +61,24 @@ Future<String> getCurrentUserToken()async{
   return token.toString();
 }
 
+Future<void> savePlantData(PlantUserResponse response)async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  // print("Token "+data.token);
+  sharedPreferences.setString("plantId", response.id_plant);
+  sharedPreferences.setString("deviceId", response.device_id);
+  sharedPreferences.setBool("plantDeath", response.plant_death);
 
+}
 
 Future<void> saveUserData(SignInResponse data) async {
 
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
+  // print("Token "+data.token);
   sharedPreferences.setString("token", data.token);
   sharedPreferences.setString("username", data.username);
+
+  // final token = await getCurrentUserToken();
+  // print(token);
 
 }
 final plantfleuries = PlantType(id: "id", type: "Plantes fleuries", path: "asset/images/plante_fleuries.png");

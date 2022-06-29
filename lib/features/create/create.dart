@@ -7,7 +7,7 @@ import 'package:happytree/features/create/api.dart';
 import 'package:happytree/features/menu/menu.dart';
 import 'package:happytree/features/plantitem/plantitem.dart';
 import 'package:happytree/models/PlantType.dart';
-import 'package:happytree/response/plantresponse.dart';
+import 'package:happytree/response/plantsresponse.dart';
 
 import '../../../components/design/design.dart';
 import '../../../util/util.dart';
@@ -50,10 +50,10 @@ class CreateState extends State<Create> {
     ],), );
   }
 
-  Widget itemPlant(String nameFlower){
+  Widget itemPlant(String nameFlower, String plantId){
     return InkWell(
       onTap: (){
-        navigateTo(context, SettingPlant.withName(plantName: nameFlower));
+        navigateTo(context, SettingPlant.withName(plantName: nameFlower, plantId: plantId,));
       },
       child: Row(children: [
         Image.asset("asset/icons/file-eye.png",width: 40, height: 40,),
@@ -80,7 +80,7 @@ class CreateState extends State<Create> {
               shrinkWrap: true,
               itemCount: snapshot.data!.plants!.length,
               itemBuilder: (context, index) {
-                return itemPlant(snapshot.data!.plants![index].name_flower ?? "test");
+                return itemPlant(snapshot.data!.plants![index].name_flower ?? "test", snapshot.data!.plants![index].id ?? "id");
               },);
           }
           else{

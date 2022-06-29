@@ -6,21 +6,19 @@ import 'package:happytree/models/PlantModel.dart';
 import 'BaseResponse.dart';
 
 
-class PlantsResponse extends BasicResponse{
-
-  late List<PlantModel>? plants;
-
-  PlantsResponse({ code,  message, payload}) : super(code: code, message:message, payload: payload);
+class PlantResponse extends BasicResponse<PlantModel>{
 
 
-  PlantsResponse.jsonData({ code,  message, payload, required this.plants,
-}) :super(code: code, message: message, payload: payload);
+  PlantResponse({ code,  message, payload}) : super(code: code, message:message, payload: payload);
 
-  factory PlantsResponse.fromJsonData(Map<String,  dynamic> json){
-    return PlantsResponse.jsonData(
+
+  PlantResponse.jsonData({ code,  message, payload,}) :super(code: code, message: message, payload: payload);
+
+  factory PlantResponse.fromJsonData(Map<String,  dynamic> json){
+    return PlantResponse.jsonData(
       code: json['code'],
       message: json['message'],
-      plants:  (json['payload'] as List).map((e) => PlantModel.fromJsonData(e)).toList(),
+      payload: PlantModel.fromJsonData(json['payload']),
     );
   }
 }

@@ -33,7 +33,7 @@ class MenuState extends State<Menu> {
     super.initState();
   }
 
-  Widget  itemPlantCreated(String plantName, String plantlocation){
+  Widget  itemPlantCreated(String plantName, String plantlocation, String plantId){
     return ListTile(
       leading:  Container(
         width: 50,
@@ -50,7 +50,7 @@ class MenuState extends State<Menu> {
       title: Text(plantName),
     trailing: IconButton(
         onPressed: () {
-      navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation));
+      navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation, plantId: plantId,));
 
 
     },
@@ -85,7 +85,10 @@ class MenuState extends State<Menu> {
                 if(snapshot.connectionState == ConnectionState.done){
                   if(snapshot.hasData){
                     log(snapshot.data?.plant_name.toString() ?? "test");
-                    return itemPlantCreated(snapshot.data?.plant_name ?? "", snapshot.data?.plant_death.toString() ?? "");
+                    return itemPlantCreated(snapshot.data?.plant_name ?? "",
+                        snapshot.data?.plant_death.toString() ?? "",
+                      snapshot.data?.id_plant ?? "",
+                    );
                   }
 
                   else{

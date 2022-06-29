@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:happytree/features/connection_setting/connection_setting.dart';
 import 'package:happytree/features/menu/menu.dart';
+import 'package:happytree/features/setting_plant/api.dart';
 import 'package:happytree/util/util.dart';
 
 import '../../components/design/design.dart';
@@ -14,8 +15,9 @@ class SettingPlant extends StatefulWidget {
 
   final routeName = '/settingplant';
   final plantName;
-  const SettingPlant({Key? key, this.plantName = ""}) : super(key: key);
-  const SettingPlant.withName({Key? key, required this.plantName}) : super(key: key);
+  final String plantId;
+  const SettingPlant({Key? key, this.plantName = "", this.plantId = ""}) : super(key: key);
+  const SettingPlant.withName({Key? key, required this.plantName, required this.plantId }) : super(key: key);
 
   @override
   SettingPlantState createState() => SettingPlantState();
@@ -99,12 +101,19 @@ class SettingPlantState extends State<SettingPlant> {
           Align(child: ElevatedButton(
 
               style: BaseButtonRoundedColorBorder(200, 50, APPCOLOR4, 25.0),
-              onPressed: ()  {
+              onPressed: ()  async {
                 final title = textEditingController.text;
                 log(title);
 
                 saveNewTree(title, widget.plantName,dropdownValue);
-                navigateWithNamePop(context, Menu().routeName);
+                final result = await createPlante(title, widget.plantId);
+                if(result.code == SUCCESS_CODE){
+                  showSnackBar(context, result.message);
+                  navigateWithNamePop(context, Menu().routeName);
+                }
+                else{
+                  showSnackBar(context, "Une erreur est survenue");
+                }
 
               }, child: Text("Enregistrer", style: TextStyle(fontSize: 20),)),)
 
@@ -115,7 +124,7 @@ class SettingPlantState extends State<SettingPlant> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset : false,
+        // resizeToAvoidBottomInset : false,
         appBar: AppBar(),
 
         body: Center(

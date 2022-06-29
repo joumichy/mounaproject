@@ -1,21 +1,25 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:happytree/response/plantsresponse.dart';
+import 'package:happytree/response/plantresponse.dart';
 import 'package:happytree/response/plantuserresponse.dart';
 import 'package:http/http.dart'as http;
 
 import '../../util/config.dart';
 import '../../util/util.dart';
 
-Future<PlantsResponse> getPlantTypes() async{
+Future<PlantResponse> getPlantById(String plantId) async{
 
   String token = await getCurrentUserToken();
   late http.Response response;
-  const String path = "/plant/gettypes";
+  const String path = "/plant/gettypebyid";
 
+
+  final queryParameters = {
+    "plantId": plantId,
+  };
   try {
-    var url = Uri.parse(URL+path);
+    var url = Uri.parse(URL+path).replace(queryParameters: queryParameters);
     response = await http.get(url,
         headers: {"Content-type": "application/json",'Authorization': 'Bearer '+ token});
   }
@@ -29,7 +33,7 @@ Future<PlantsResponse> getPlantTypes() async{
     log("OK " + response.statusCode.toString());
     print(jsonDecode(response.body));
     try{
-      PlantsResponse data = PlantsResponse.fromJsonData(
+      PlantResponse data = PlantResponse.fromJsonData(
           json.decode(response.body));
       print(data.message);
       return data ;
@@ -37,12 +41,12 @@ Future<PlantsResponse> getPlantTypes() async{
       log("ERREUR");
       print(e);
     }
-    return PlantsResponse(code: json.decode(response.body)['code'], message: json.decode(response.body)['message']);
+    return PlantResponse(code: json.decode(response.body)['code'], message: json.decode(response.body)['message']);
 
 
   }
   else{
-    return PlantsResponse(code: json.decode(response.body)['code'], message: json.decode(response.body)['message']);
+    return PlantResponse(code: json.decode(response.body)['code'], message: json.decode(response.body)['message']);
   }
 
 
