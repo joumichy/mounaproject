@@ -45,7 +45,9 @@ PlantModel({
     required this.luminosite
 });
 
-PlantModel.jsonData({
+PlantModel.init();
+
+  PlantModel.jsonData({
   required this.id,
   required this.name_flower,
   required this.origin,

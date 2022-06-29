@@ -33,7 +33,8 @@ class MenuState extends State<Menu> {
     super.initState();
   }
 
-  Widget  itemPlantCreated(String plantName, String plantlocation, String plantId){
+  Widget  itemPlantCreated(String plantName, String plantlocation, String plantUserId, String plantId){
+    log("PLANT ID : $plantId");
     return ListTile(
       leading:  Container(
         width: 50,
@@ -50,7 +51,7 @@ class MenuState extends State<Menu> {
       title: Text(plantName),
     trailing: IconButton(
         onPressed: () {
-      navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation, plantId: plantId,));
+      navigateTo(context, RapportPlant.withName(plantName: plantName, plantLocation: plantlocation, plantUserId: plantUserId, plantId: plantId,));
 
 
     },
@@ -83,11 +84,13 @@ class MenuState extends State<Menu> {
               future: getPlantUser(),
               builder: (context,  AsyncSnapshot<PlantUserResponse>snapshot) {
                 if(snapshot.connectionState == ConnectionState.done){
-                  if(snapshot.hasData){
-                    log(snapshot.data?.plant_name.toString() ?? "test");
+                  log(snapshot.data?.id.toString() ?? "test");
+                  final id = snapshot.data?.id;
+                  if(id != null ){
                     return itemPlantCreated(snapshot.data?.plant_name ?? "",
                         snapshot.data?.plant_death.toString() ?? "",
-                      snapshot.data?.id_plant ?? "",
+                      snapshot.data?.id ?? "",
+                      snapshot.data?.id_plant ?? ""
                     );
                   }
 

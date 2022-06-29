@@ -64,9 +64,9 @@ Future<String> getCurrentUserToken()async{
 Future<void> savePlantData(PlantUserResponse response)async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   // print("Token "+data.token);
-  sharedPreferences.setString("plantId", response.id_plant);
-  sharedPreferences.setString("deviceId", response.device_id);
-  sharedPreferences.setBool("plantDeath", response.plant_death);
+  sharedPreferences.setString("plantId", response.id_plant ?? "");
+  sharedPreferences.setString("deviceId", response.device_id ?? "");
+  sharedPreferences.setBool("plantDeath", response.plant_death ?? false);
 
 }
 

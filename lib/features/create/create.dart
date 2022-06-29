@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:happytree/features/create/api.dart';
 import 'package:happytree/features/menu/menu.dart';
 import 'package:happytree/features/plantitem/plantitem.dart';
+import 'package:happytree/models/PlantModel.dart';
 import 'package:happytree/models/PlantType.dart';
 import 'package:happytree/response/plantsresponse.dart';
 
 import '../../../components/design/design.dart';
 import '../../../util/util.dart';
+import '../../response/plantresponse.dart';
 import '../setting_plant/setting_plant.dart';
 
 class Create extends StatefulWidget {
@@ -31,9 +33,14 @@ class CreateState extends State<Create> {
 
   List<PlantType> plantList = mocTypesOfPlantes;
   bool isSearching = false;
+  bool hasResult = false;
+
+  late PlantModel plantModel = PlantModel.init();
   @override
   void initState() {
 
+    plantModel.id = "1";
+    plantModel.name_flower = "1";
     super.initState();
 
   }
@@ -42,12 +49,16 @@ class CreateState extends State<Create> {
 
 
   Widget contentSearch(){
-    return Visibility(
-      visible: isSearching ,
-      child: Column(children: const [
-      Padding(padding: EdgeInsets.all(12), child:   Text("Chercher une plante", style: TextStyle(fontSize: 25),),),
-      Text("Chercher un nom, variété ou un nom spécifique", style: TextStyle(fontSize: 16),)
-    ],), );
+    return Column(children: [
+      Visibility(
+      visible: isSearching && !hasResult,
+      child: Column(children: [
+        Padding(padding: EdgeInsets.all(12), child:   Text("Chercher une plante", style: TextStyle(fontSize: 25),),),
+        Text("Chercher un nom, variété ou un nom spécifique", style: TextStyle(fontSize: 16),),
+
+      ],), ),
+      Visibility(visible  : isSearching && hasResult,child: itemPlant(plantModel.name_flower ?? "", plantModel.id ?? "")),
+    ],);
   }
 
   Widget itemPlant(String nameFlower, String plantId){
@@ -71,7 +82,7 @@ class CreateState extends State<Create> {
       visible: !isSearching,
       child:  Expanded(child:
       FutureBuilder(
-        future: getPlantTypes(),
+        future: getPlantsTypes(),
         builder: (context, AsyncSnapshot<PlantsResponse>snapshot) {
 
           if(snapshot.connectionState == ConnectionState.done){
@@ -84,28 +95,12 @@ class CreateState extends State<Create> {
               },);
           }
           else{
-            return Text("No Data");
+            return Center(child: CircularProgressIndicator(color: APPCOLOR,));
           }
       },)
       ));
   }
 
-  itemTypeOfPlant(PlantType plantType){
-    return InkWell(onTap: () {
-      //TODO sendData
-      navigateTo(context, PlantItem(plantId: plantType.id,));
-      
-    },child: Column(children: [
-      ClipRRect(
-
-
-        borderRadius: BorderRadius.circular(10.0),
-        child: Image(
-
-            image: AssetImage(plantType.path),width: 100,height: 100,fit: BoxFit.fill),),
-      Padding(padding: EdgeInsets.only(top: 5), child: Text(plantType.type,textAlign: TextAlign.center),)
-    ],),);
-  }
   Widget header(){
     return
         Column(children: [
@@ -147,7 +142,18 @@ class CreateState extends State<Create> {
 
 
                   },)
-              ),),onFocusChange: (focus){
+              ),),
+              onFocusChange: (focus) async {
+              if(focus && textEditingController.text.isNotEmpty){
+                final result = await getPlantTypeByName(textEditingController.text);
+                if(result.code == SUCCESS_CODE){
+                  plantModel = result.payload;
+                  hasResult = true;
+                  setState(() {
+
+                  });
+                }
+              }
 
               log("CLICK $focus");
               setState(() {
@@ -159,13 +165,14 @@ class CreateState extends State<Create> {
         ],);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset : false,
         appBar: AppBar(),
         body: Column(
-            children: [header(),content(), contentSearch()],
+            children: [header(),content(), contentSearch(),],
         )
     );
   }

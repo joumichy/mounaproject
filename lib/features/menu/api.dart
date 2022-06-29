@@ -26,7 +26,7 @@ Future<PlantUserResponse> getPlantUser() async{
 
   if(response.statusCode == 200) {
     log("OK " + response.statusCode.toString());
-    // print(jsonDecode(response.body));
+    print(jsonDecode(response.body));
     try{
       PlantUserResponse data = PlantUserResponse.fromJsonData(
           json.decode(response.body));

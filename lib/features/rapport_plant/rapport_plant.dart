@@ -3,9 +3,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:happytree/features/connection_setting/connection_setting.dart';
 import 'package:happytree/features/menu/menu.dart';
 import 'package:happytree/features/rapport_plant/api.dart';
+import 'package:happytree/response/planthistoryresponse.dart';
+import 'package:happytree/response/plantresponse.dart';
 import 'package:happytree/util/util.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -18,9 +21,10 @@ class RapportPlant extends StatefulWidget {
   final routeName = '/rapportplant';
   final String plantName;
   final String plantLocation;
+  final String plantUserId;
   final String plantId;
-  const RapportPlant({Key? key, this.plantName = "",this.plantLocation = "", this.plantId =""}) : super(key: key);
-  const RapportPlant.withName({Key? key, required this.plantName,  required this.plantLocation, required this.plantId}) : super(key: key);
+  const RapportPlant({Key? key, this.plantName = "",this.plantLocation = "", this.plantUserId ="", this.plantId =""}) : super(key: key);
+  const RapportPlant.withName({Key? key, required this.plantName,  required this.plantLocation, required this.plantUserId, required this.plantId}) : super(key: key);
 
   @override
   RapportPlantState createState() => RapportPlantState();
@@ -58,125 +62,150 @@ class RapportPlantState extends State<RapportPlant> {
   Widget content() {
     return FutureBuilder(
       future: getPlantById(widget.plantId),
-      builder: (context, snapshot) {
+      builder: (context, AsyncSnapshot<PlantResponse>snapshot) {
+        if(snapshot.connectionState == ConnectionState.done){
+          return  ListView(
+            children: [
+              Padding(padding: EdgeInsets.only(top: 0, bottom: 40),
 
-      return  ListView(
-        children: [
-          Padding(padding: EdgeInsets.only(top: 0, bottom: 40),
+                  child: Image.asset("asset/images/plante.png",width: 600,height: 200,fit: BoxFit.cover,)),
 
-              child: Image.asset("asset/images/plante.png",width: 600,height: 200,fit: BoxFit.cover,)),
+              Padding(padding: EdgeInsets.only(top: 0, bottom: 0), child:           Text(widget.plantName, textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
 
-          Padding(padding: EdgeInsets.only(top: 0, bottom: 0), child:           Text(widget.plantName, textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,),)),
+              Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
+                  FutureBuilder(
+                    future: getPlantHistoryById("1") ,
+                    builder: (context, AsyncSnapshot<PlantHistoryResponse> snapshot) {
+                      // log(snapshot.data?.payload.sample_time ?? "test");
+                      return   Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(children: [
+                            Image.asset("asset/icons/luminosity.png", width: 40, height: 40,),
+                            Text(snapshot.data?.payload.device_data?.luminosity ?? "")
+                          ],),
+                          Column(children: [
+                            Image.asset("asset/icons/temp.png", width: 40, height: 40,),
+                            Text(snapshot.data?.payload.device_data?.temperature?? "")
 
-          Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
-              ListTile(leading: Container(child: Icon(Icons.wb_sunny)), title: Text("Mi-soleil, mi ombre"), subtitle: Text("Luminosité idéale"),),
-              "Luminosité")),
+                          ],),
+                          Column(children: [
+                            Image.asset("asset/icons/humidity.png", width: 40, height: 40,),
+                            Text(snapshot.data?.payload.device_data?.humidity ?? "")
 
-          Padding(padding: EdgeInsets.only(top: 40, bottom: 0),
-              child:     cardElem(
+                          ],)
+                        ],
+                      );
 
-              SfSliderTheme(
-                data:  SfSliderThemeData(
-                  thumbColor: Colors.red,
-                  activeDividerColor: Colors.white,
-                  activeDividerStrokeColor: Colors.red,
-                  activeDividerStrokeWidth: 1,
-                  activeDividerRadius: 6,
-                  activeTrackColor: Colors.red,
+                    },
+                  )
+                  ,"Etat actuel")),
+              Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
+                  ListTile(leading: Container(child: Icon(Icons.wb_sunny)), title: Text(snapshot.data?.payload.luminosite ?? ""), subtitle: Text("Luminosité idéale"),),
+                  "Luminosité")),
 
-                  disabledActiveDividerColor: Colors.white,
-                  inactiveDividerColor: Colors.red,
-                  inactiveDividerStrokeWidth: 1,
-                  inactiveDividerRadius: 6,
-                ),
-                child:  SfSlider(
-                    showTicks: true,
-                    showLabels: true,
-                    enableTooltip: true,
-                    showDividers: true,
-                    // dividerShape:  DividerShapeCustom(),
-                    inactiveColor: Colors.red.shade50,
-                    // activeColor: Colors.red,
-                    value: tempValue,onChanged: (value){
-                  tempValue = value; setState(() {
+              Padding(padding: EdgeInsets.only(top: 40, bottom: 0),
+                  child:     cardElem(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(children: [
+                            Image.asset("asset/icons/hot-temp.png", width: 40, height: 40,),
+                            Text(snapshot.data?.payload.max_temp.toString() ?? "")
+                          ],),
+                          Column(children: [
+                            Image.asset("asset/icons/cold-temp.png", width: 40, height: 40,),
+                            Text(snapshot.data?.payload.min_temp.toString() ?? "")
 
-                  });}, interval: 5, min : 0, max : 30),
-              ),
-
-              "Température idéale")),
-
-
-          // Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
-          //     ListTile(leading: Container(child: Image.asset("asset/icons/degree.png",width: 40, height: 40,)), title: Text("5°C"), subtitle: Text("Température de survie la plus faible en pot"),),
-          //     "Zone de rusticité")),
-
-          Padding(padding: EdgeInsets.only(top: 40, bottom: 10),
-              child:     cardElem(
-                  Padding(padding: EdgeInsets.only(left: 10,right: 10),
-                    child:   Column(
-
-                      children:  [
-                        // Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Intérieur"),alignment: Alignment.centerLeft,),),
-
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text("Jan"),Text("Jui"),Text("Dec"),],),
-                        // ElevatedButton(
-                        //
-                        //     style: BaseButtonRoundedColorBorder(600, 30, APPCOLOR3, 25.0),
-                        //     onPressed: ()  {
-                        //
-                        //     }, child: Text("Année compl.", style: TextStyle(color: Colors.black),)),
-                        // Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Extérieur"),alignment: Alignment.centerLeft,),),
-                        // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text("Jan"),Text("Jui"),Text("Dec"),],),
-                        SfSliderTheme(
-                          data:  SfSliderThemeData(
-                            activeDividerColor: Colors.red,
-                            activeDividerStrokeColor: Colors.red,
-                            activeDividerStrokeWidth: 1,
-                            activeDividerRadius: 6,
-                            activeTrackColor: Colors.transparent,
-
-                            disabledActiveDividerColor: Colors.red,
-                            inactiveDividerColor: Colors.red,
-                            inactiveDividerStrokeColor: Colors.red,
-                            inactiveDividerStrokeWidth: 1,
-                            inactiveDividerRadius: 6,
-                            inactiveTrackColor: Colors.transparent,
-                            thumbColor: Colors.transparent,
-                            thumbRadius: 50,
-                            overlayRadius: 0,
+                          ],)
+                        ],
+                      ),
+                      "Température idéale")),
 
 
-                          ),
-                          child : SfSlider(
-                            // enableTooltip: true,
-                              showDividers: true,
+              // Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
+              //     ListTile(leading: Container(child: Image.asset("asset/icons/degree.png",width: 40, height: 40,)), title: Text("5°C"), subtitle: Text("Température de survie la plus faible en pot"),),
+              //     "Zone de rusticité")),
+
+              Padding(padding: EdgeInsets.only(top: 40, bottom: 10),
+                  child:     cardElem(
+                      Padding(padding: EdgeInsets.only(left: 10,right: 10),
+                        child:   Column(
+
+                          children:  [
+                            // Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Intérieur"),alignment: Alignment.centerLeft,),),
+
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text("Jan"),Text("Jui"),Text("Dec"),],),
+                            // ElevatedButton(
+                            //
+                            //     style: BaseButtonRoundedColorBorder(600, 30, APPCOLOR3, 25.0),
+                            //     onPressed: ()  {
+                            //
+                            //     }, child: Text("Année compl.", style: TextStyle(color: Colors.black),)),
+                            // Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Extérieur"),alignment: Alignment.centerLeft,),),
+                            // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text("Jan"),Text("Jui"),Text("Dec"),],),
+                            SfSliderTheme(
+                              data:  SfSliderThemeData(
+                                activeDividerColor: Colors.red,
+                                activeDividerStrokeColor: Colors.red,
+                                activeDividerStrokeWidth: 1,
+                                activeDividerRadius: 6,
+                                activeTrackColor: Colors.transparent,
+
+                                disabledActiveDividerColor: Colors.red,
+                                inactiveDividerColor: Colors.red,
+                                inactiveDividerStrokeColor: Colors.red,
+                                inactiveDividerStrokeWidth: 1,
+                                inactiveDividerRadius: 6,
+                                inactiveTrackColor: Colors.transparent,
+                                thumbColor: Colors.transparent,
+                                thumbRadius: 50,
+                                overlayRadius: 0,
 
 
-                              // thumbShape: SfThumbShapeCustom(),
-                              thumbIcon: Align( child : Container( width: 250, height : 30,decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: APPCOLOR3),child : Center(child: Text("mai - sep",style :TextStyle(color:  Colors.black),textAlign: TextAlign.center,)))),
-                              // dividerShape:  DividerShapeCustom(),
-                              // activeColor: Colors.red,
-                              value: 15,
-                              onChanged: (value){
-                              }, interval: 5, min : 0, max : 30),
-                        ),
+                              ),
+                              child : SfSlider(
+                                // enableTooltip: true,
+                                  showDividers: true,
+
+
+                                  // thumbShape: SfThumbShapeCustom(),
+                                  thumbIcon: Align( child : Container( width: 250, height : 30,decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: APPCOLOR3),child : Center(child: Text(snapshot.data?.payload.periode??"",style :TextStyle(color:  Colors.black),textAlign: TextAlign.center,)))),
+                                  // dividerShape:  DividerShapeCustom(),
+                                  // activeColor: Colors.red,
+                                  value: 15,
+                                  onChanged: (value){
+                                  }, interval: 5, min : 0, max : 30),
+                            ),
 
 
 
-                      ],
-                    ),),
-                  "Période adaptées")),
-          ElevatedButton(
+                          ],
+                        ),),
+                      "Période adaptées")),
+              ElevatedButton(
 
-              style: BaseButtonRoundedColorBorder(200, 50, Colors.pink, 25.0),
-              onPressed: ()  {
+                  style: BaseButtonRoundedColorBorder(200, 50, Colors.pink, 25.0),
+                  onPressed: ()  async {
 
-                navigateWithNamePop(context, Menu().routeName);
+                    final result = await killPlantById(widget.plantUserId);
+                    if(result.code == SUCCESS_CODE){
+                      navigateWithNamePop(context, Menu().routeName);
+                      showSnackBar(context, "Plante tuée");
+                    }
+                    else{
+                      showSnackBar(context, "Une erreur est survenue");
 
-              }, child: Text("Plante Morte", style: TextStyle(fontSize: 20),)),
+                    }
+
+                  }, child: Text("Plante Morte", style: TextStyle(fontSize: 20),)),
 
 
-        ],);
+            ],);
+        }
+        else{
+          return Center(child: CircularProgressIndicator(color: APPCOLOR,));
+        }
     },);
   }
 
