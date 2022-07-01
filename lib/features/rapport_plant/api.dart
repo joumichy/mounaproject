@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:happytree/response/baseresponse.dart';
+import 'package:happytree/response/planthistoriesresponse.dart';
 import 'package:happytree/response/planthistoryresponse.dart';
 import 'package:happytree/response/plantresponse.dart';
-import 'package:happytree/response/plantuserresponse.dart';
 import 'package:http/http.dart'as http;
 
-import '../../models/PlantHistoryModel.dart';
+
 import '../../util/config.dart';
 import '../../util/util.dart';
 
@@ -55,6 +55,50 @@ Future<PlantHistoryResponse> getPlantHistoryById(String deviceId) async{
 
 }
 
+Future<PlantsHistoriesResponse> getPlantHistoriesById(String deviceId) async{
+
+  String token = await getCurrentUserToken();
+  late http.Response response;
+  const String path = "/plant/histories";
+
+
+  final queryParameters = {
+    "deviceId": deviceId,
+  };
+  try {
+    var url = Uri.parse(URL+path).replace(queryParameters: queryParameters);
+    response = await http.get(url,
+        headers: {"Content-type": "application/json",'Authorization': 'Bearer '+ token});
+  }
+  catch (e) {
+    print(e.toString());
+
+    return json.decode(response.body);
+  }
+
+  if(response.statusCode == 200) {
+    log("OK " + response.statusCode.toString());
+    print(jsonDecode(response.body));
+    try{
+      PlantsHistoriesResponse data = PlantsHistoriesResponse.fromJsonData(
+          json.decode(response.body));
+      print(data.message);
+      return data ;
+    }catch(e){
+      log("ERREUR");
+      print(e);
+    }
+    return PlantsHistoriesResponse(code: json.decode(response.body)['code'], message: json.decode(response.body)['message'], payload: null);
+
+
+  }
+  else{
+    return PlantsHistoriesResponse(code: json.decode(response.body)['code'], message: json.decode(response.body)['message']);
+  }
+
+
+}
+
 Future<PlantResponse> getPlantById(String plantId) async{
 
   String token = await getCurrentUserToken();
@@ -77,8 +121,8 @@ Future<PlantResponse> getPlantById(String plantId) async{
   }
 
   if(response.statusCode == 200) {
-    log("OK " + response.statusCode.toString());
-    print(jsonDecode(response.body));
+    // log("OK " + response.statusCode.toString());
+    // print(jsonDecode(response.body));
     try{
       PlantResponse data = PlantResponse.fromJsonData(
           json.decode(response.body));

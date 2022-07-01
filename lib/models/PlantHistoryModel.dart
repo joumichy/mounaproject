@@ -29,7 +29,6 @@ class PlantHistory{
       device_id: json['device_id'],
       sample_time: json['sample_time'],
 
-
     );
   }
 
