@@ -26,7 +26,6 @@ class Menu extends StatefulWidget {
 class MenuState extends State<Menu> {
 
 
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   bool passwordhide = true;
   @override
   void initState() {
